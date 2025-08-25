@@ -31,6 +31,9 @@ def webhook():
     print("Parsed JSON:", request.get_json(force=True, silent=True))
 
     token = request.headers.get('Authorization')
+    print("🔍 Received Token:", token)
+    print("🔐 Expected Token:", SECURE_TOKEN)
+
     if token != SECURE_TOKEN:
         logging.warning("Unauthorized access attempt")
         return jsonify({'error': 'Unauthorized'}), 403
