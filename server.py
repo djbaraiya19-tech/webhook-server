@@ -7,7 +7,9 @@ app = Flask(__name__)
 
 # 🔐 Security Token for Authorization
 SECURE_TOKEN = os.getenv("SECURE_TOKEN")
-
+# 🔐 Security Token for Authorization
+SECURE_TOKEN = os.getenv("SECURE_TOKEN")
+print("✅ Loaded SECURE_TOKEN:", SECURE_TOKEN)
 # 📲 Telegram Bot Credentials from Environment
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
