@@ -1,15 +1,16 @@
 from flask import Flask, request, jsonify
 import requests
 import logging
+import os
 
 app = Flask(__name__)
 
 # 🔐 Security Token for Authorization
-SECURE_TOKEN = "darshit123secure"  # Replace with your actual token
+SECURE_TOKEN = os.getenv("SECURE_TOKEN")
 
-# 📲 Telegram Bot Credentials
-TELEGRAM_TOKEN = "your_telegram_bot_token"  # Replace with your bot token
-CHAT_ID = "your_chat_id"  # Replace with your Telegram chat ID
+# 📲 Telegram Bot Credentials from Environment
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
 # 🛎️ Telegram Notification Function
 def notify_telegram(message):
@@ -24,6 +25,11 @@ def notify_telegram(message):
 # 🚨 Webhook Endpoint
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    # 🐛 Debug: Log incoming request
+    print("Headers:", request.headers)
+    print("Raw Body:", request.get_data(as_text=True))
+    print("Parsed JSON:", request.get_json(force=True, silent=True))
+
     token = request.headers.get('Authorization')
     if token != SECURE_TOKEN:
         logging.warning("Unauthorized access attempt")
@@ -37,7 +43,6 @@ def webhook():
         logging.info(f"Received alert: {data}")
         notify_telegram(f"🚨 Alert received: {data}")
 
-        # Optional: Add trading logic here
         return jsonify({'status': 'Success'}), 200
 
     except Exception as e:
